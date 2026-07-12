@@ -1,0 +1,18 @@
+# Environment files — never commit secrets
+.env
+.env.*
+!.env.example
+
+# Node / Next.js (future application phases)
+node_modules/
+.next/
+out/
+dist/
+
+# Logs and OS noise
+*.log
+.DS_Store
+Thumbs.db
+
+# Supabase local dev artifacts
+supabase/.temp/

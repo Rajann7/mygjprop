@@ -482,13 +482,13 @@ Raw secrets must never be written here.
 
 | Provider area          | Intended use                                 | Current status   | Verification                      | Required next action                                         |
 | ---------------------- | -------------------------------------------- | ---------------- | --------------------------------- | ------------------------------------------------------------ |
-| Supabase Auth          | Mobile authentication foundation             | `NOT_STARTED`        | `NOT_STARTED` under new authority | Audit configuration and final flow                           |
-| Supabase PostgreSQL    | Primary database                             | `NOT_STARTED`        | `NOT_STARTED` under new authority | Audit schema, indexes, migrations, and performance           |
+| Supabase Auth          | Mobile authentication foundation             | `CONFIGURED_NOT_TESTED` | `NOT_STARTED`                  | Credentials received 2026-07-12 (stored in .env.local only); test auth flow in the relevant phase |
+| Supabase PostgreSQL    | Primary database                             | `CONFIGURED_NOT_TESTED` | `NOT_STARTED`                  | Project URL + keys received 2026-07-12 (.env.local); connect and create first migrations in the schema phase |
 | Supabase RLS           | Data isolation                               | `NOT_STARTED`        | `NOT_STARTED` under new authority | Run guest, wrong-user, wrong-role, and admin tests           |
-| Supabase server client | Trusted server access                        | `NOT_STARTED`        | `NOT_STARTED`                     | Audit server/client boundary                                 |
+| Supabase server client | Trusted server access                        | `CONFIGURED_NOT_TESTED` | `NOT_STARTED`                  | Service-role key received (server-only, .env.local); wire in app foundation phase |
 | SMS OTP                | OTP delivery only                            | `SETUP_REQUIRED` | `NOT_STARTED`                     | Select provider, configure, test, and retest production      |
 | Email                  | External notifications and operational email | `SETUP_REQUIRED` | `NOT_STARTED`                     | Select provider and configure templates, retries, and status |
-| Payment                | Subscription and approved payment flows      | `SETUP_REQUIRED` | `NOT_STARTED`                     | Configure provider and secure webhook processing             |
+| Payment (Razorpay)     | Subscription and approved payment flows      | `TEST_MODE_ONLY` | `NOT_STARTED`                     | Test-mode keys + webhook secret received 2026-07-12 (.env.local); webhook needs public URL; integrate in billing phase |
 | Media storage          | Images and approved documents                | `SETUP_REQUIRED` | `NOT_STARTED`                     | Select storage provider and configure access policy          |
 | CDN                    | Optimized media and public asset delivery    | `SETUP_REQUIRED` | `NOT_STARTED`                     | Configure cache and invalidation                             |
 | Error monitoring       | Production diagnostics                       | `SETUP_REQUIRED` | `NOT_STARTED`                     | Configure provider and redaction                             |
@@ -1230,6 +1230,26 @@ Before every high-risk phase:
 ---
 
 ## 32. Recent State Changes
+
+### 2026-07-12 — Provider credentials received (Supabase + Razorpay test mode)
+
+```text
+Date: 2026-07-12
+Event: User supplied Supabase project credentials (URL, anon key,
+publishable key, service-role key, DB password, access token) and Razorpay
+TEST-MODE credentials (key id, secret, webhook secret).
+Storage: All values written to .env.local ONLY, which is gitignored and
+never committed. .env.example (names/placeholders only) and .gitignore
+committed to the repository. No secret value appears in any committed file.
+Provider status: Supabase → CONFIGURED_NOT_TESTED; Razorpay →
+TEST_MODE_ONLY. No provider marked ACTIVE — no connection test has run yet
+(no application code exists).
+Security note: these values were shared in chat; the service-role key,
+DB password, and access token should be rotated before production.
+Razorpay webhook delivery requires a public URL (localhost cannot receive).
+Branch: 2026-07-12 created and pushed with the non-secret changes.
+Next prompt: Phase 1 Implementation Prompt (unchanged)
+```
 
 ### 2026-07-12 — Phase 0 Manual Verification PASS
 
