@@ -1181,8 +1181,8 @@ Implementation must not begin until the required authority document for that pha
 
 | Field                       | Current value                                                                 |
 | --------------------------- | ----------------------------------------------------------------------------- |
-| Current rollback checkpoint | Git initialized 2026-07-12 during Phase -1; baseline commit `phase-minus-1 documentation baseline` on `master` contains the full 13-file set plus audited state files |
-| Last known stable commit    | The Phase -1 baseline commit (first commit in repository history)              |
+| Current rollback checkpoint | Git initialized 2026-07-12 during Phase -1; baseline commit `eb89ea3` on `master` contains the full 13-file set plus audited state files |
+| Last known stable commit    | `eb89ea3` (root commit of repository history)                                  |
 | Uncommitted changes         | None existed before Phase -1 (repository was not under version control)        |
 | Database backup point       | Not applicable — no database exists yet                                        |
 | Environment backup          | Not applicable — no environment files exist yet                                |
