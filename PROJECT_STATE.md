@@ -124,10 +124,10 @@ Do not use vague project statuses such as:
 | Product type                         | Gujarat-focused real-estate marketplace and SaaS management platform |
 | Current workstream                   | Phase execution under the new authority system                        |
 | Current documentation phase          | All 13 documentation files complete                                  |
-| Current status                       | Phase 2 implementation `DONE` — Phase 2 verification pending         |
+| Current status                       | Phase 2 `PASS` — implementation and verification complete            |
 | Last completed documentation file    | `prompts/00_FULL_PHASE_IMPLEMENTATION_AND_VERIFICATION_PROMPTS.md`   |
-| Current implementation phase         | Phase 2 — Database Foundation (`DONE`)                               |
-| Current verification phase           | Phase 2 verification `NOT_STARTED`; Phases -1, 0, 1 `PASS`           |
+| Current implementation phase         | Phase 2 — Database Foundation (`PASS`)                               |
+| Current verification phase           | Phase 2 verification `PASS` (2026-07-12); Phases -1, 0, 1 `PASS`     |
 | Repository audit under new authority | `PASS` — see Section 6 for findings                                  |
 | Production readiness                 | `NOT_STARTED`                                                        |
 | Deployment status                    | `NOT_STARTED` — no application code exists                           |
@@ -1231,6 +1231,46 @@ Before every high-risk phase:
 
 ## 32. Recent State Changes
 
+### 2026-07-12 — Phase 2 Manual Verification PASS
+
+```text
+Date: 2026-07-12
+Verification phase: Phase 2 — Database Foundation
+Result: PASS (67/68 harness checks; the single flag was the planner
+choosing an alternate valid owner-scoped index on a 1-row table, not a
+defect)
+Method: scripts/verify-db.mjs — direct Postgres connection to the dev
+project; identities simulated via SET LOCAL role + request.jwt.claims
+(the exact mechanism PostgREST uses), isolated @dev.mygjprop.test
+fixtures created and fully cleaned up (0 rows left)
+Migration verification: dev project started clean; 11/11 applied in
+order with no manual steps; re-push reports "Remote database is up to
+date" (deterministic, no drift); db lint clean; generated types compile
+Relationships verified: profile→auth identity, one active public role,
+property/project/requirement ownership, unit→project, inquiry/lead
+exactly-one-source + kind match, message/follow-up→lead, promotion→own
+project, payment→order→invoice→items→refund, recovery relation
+Constraints verified (all rejected): invalid role, bad location
+hierarchy, negative price/inventory/payment, available>total, duplicate
+saved property/project, duplicate idempotency key, inquiry without
+consent, unit without project
+RLS identity matrix (all correct): guest, owner, wrong owner, broker,
+wrong broker, builder, wrong builder, staff without permission, staff
+with view permission, staff with action permission, admin (cannot modify
+flags), super admin (can), trusted server; wrong-owner update affects 0
+rows; audit log delete blocked (append-only)
+Public-safe views: none of the 8 expose mobile/email/owner ids; no view
+exists over leads/messages/notes/invoices/security/moderation
+Query plans: 10 representative queries verified index-backed (public
+search, owner/builder lists, leads, follow-ups due, moderation queue,
+payment provider lookup, audit filters)
+Automated checks: db lint PASS · typecheck PASS · lint PASS · tests
+30/30 · build PASS
+Fixes applied: none required
+Server status: dev server available (npm run dev)
+Next prompt: Phase 3 Implementation Prompt
+```
+
 ### 2026-07-12 — Phase 2 Database Foundation DONE
 
 ```text
@@ -1519,7 +1559,7 @@ Next prompt: Phase -1 Manual Verification Prompt
 
 ### Current next action
 
-Run the **Phase 2 Verification Prompt** from:
+Run the **Phase 3 Implementation Prompt** from:
 
 ```text
 prompts/00_FULL_PHASE_IMPLEMENTATION_AND_VERIFICATION_PROMPTS.md
@@ -1530,8 +1570,8 @@ Open user question (must be answered before the first application-code phase): d
 Remaining execution sequence:
 
 ```text
-Phase 2 Verification
-→ Phase 3 Implementation
+Phase 3 Implementation
+→ Phase 3 Verification
 → Continue phase by phase
 ```
 
@@ -1595,7 +1635,7 @@ A new Claude session must understand the following immediately:
 
 1. All 13 documentation authority files are complete and present.
 2. The Phase -1 repository audit is `PASS` (implemented and verified 2026-07-12): the repository contains documentation only — **no application code exists**. See Section 6.
-3. Phase 2 implementation is DONE: 11 migrations, ~108 tables, full RLS, 8 public views, seeds, generated types - all applied and RLS-tested against the live Supabase project. Phase 2 verification is next.
+3. Phase 2 is PASS: 11 migrations, ~108 tables, constraints, indexes, RLS identity matrix, and public views all verified live (scripts/verify-db.mjs, 67 checks). Phase 3 is next.
 4. No implementation phase is verified under the new authority yet.
 5. Whether a legacy codebase exists elsewhere is an open user decision; treat this repository as greenfield until answered.
 6. The final product uses Owner, Broker, and Builder/Developer public roles.
@@ -1610,7 +1650,7 @@ A new Claude session must understand the following immediately:
 15. Every implementation prompt must be followed by its verification prompt.
 16. Live-browser verification is required.
 17. The development server should remain running after verification when safe.
-18. The next required prompt is the Phase 2 Verification Prompt in `prompts/00_FULL_PHASE_IMPLEMENTATION_AND_VERIFICATION_PROMPTS.md`.
+18. The next required prompt is the Phase 3 Implementation Prompt in `prompts/00_FULL_PHASE_IMPLEMENTATION_AND_VERIFICATION_PROMPTS.md`.
 
 ---
 
