@@ -1181,8 +1181,9 @@ Implementation must not begin until the required authority document for that pha
 
 | Field                       | Current value                                                                 |
 | --------------------------- | ----------------------------------------------------------------------------- |
-| Current rollback checkpoint | Git initialized 2026-07-12 during Phase -1; baseline commit `eb89ea3` on `master` contains the full 13-file set plus audited state files |
-| Last known stable commit    | `eb89ea3` (root commit of repository history)                                  |
+| Current rollback checkpoint | Git initialized 2026-07-12 during Phase -1; baseline commit `eb89ea3` on `master`; dated checkpoint branch `baseline-2026-07-12` created at Phase -1 verification PASS |
+| Last known stable commit    | `eb89ea3` (root commit); latest verified commit `9a21c9f`                     |
+| Remote repository           | `https://github.com/Rajann7/mygjprop` (origin); `master` and `baseline-2026-07-12` pushed 2026-07-12 |
 | Uncommitted changes         | None existed before Phase -1 (repository was not under version control)        |
 | Database backup point       | Not applicable — no database exists yet                                        |
 | Environment backup          | Not applicable — no environment files exist yet                                |
