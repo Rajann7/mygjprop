@@ -1198,6 +1198,7 @@ The Phase -1 repository audit found **no application code in the repository** �
 | ---------------------------------- | ----------------------------------------------- |
 | Documentation authority            | `DONE` — all 13 files present                   |
 | Repository audit                   | `PASS` — Phase -1 implemented and verified 2026-07-12 |
+| Database foundation                | `DONE` — Phase 2: 11 migrations applied, RLS live-tested (2026-07-12) |
 | Skills setup                       | `PASS` — all 9 installed and verified (2026-07-12; caveats in PROJECT_STATE.md Section 13) |
 | Role architecture                  | `PARTIAL` — Phase 1 constants/validators done; RLS and route enforcement pending |
 | Authentication                     | `NOT_STARTED` — no code exists in repository     |

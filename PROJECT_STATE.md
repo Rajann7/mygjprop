@@ -124,10 +124,10 @@ Do not use vague project statuses such as:
 | Product type                         | Gujarat-focused real-estate marketplace and SaaS management platform |
 | Current workstream                   | Phase execution under the new authority system                        |
 | Current documentation phase          | All 13 documentation files complete                                  |
-| Current status                       | Phase 1 `PASS` — implementation and verification complete            |
+| Current status                       | Phase 2 implementation `DONE` — Phase 2 verification pending         |
 | Last completed documentation file    | `prompts/00_FULL_PHASE_IMPLEMENTATION_AND_VERIFICATION_PROMPTS.md`   |
-| Current implementation phase         | Phase 1 — Architecture Foundation (`PASS`)                           |
-| Current verification phase           | Phase 1 verification `PASS` (2026-07-12); Phases -1 and 0 `PASS`     |
+| Current implementation phase         | Phase 2 — Database Foundation (`DONE`)                               |
+| Current verification phase           | Phase 2 verification `NOT_STARTED`; Phases -1, 0, 1 `PASS`           |
 | Repository audit under new authority | `PASS` — see Section 6 for findings                                  |
 | Production readiness                 | `NOT_STARTED`                                                        |
 | Deployment status                    | `NOT_STARTED` — no application code exists                           |
@@ -483,7 +483,7 @@ Raw secrets must never be written here.
 | Provider area          | Intended use                                 | Current status   | Verification                      | Required next action                                         |
 | ---------------------- | -------------------------------------------- | ---------------- | --------------------------------- | ------------------------------------------------------------ |
 | Supabase Auth          | Mobile authentication foundation             | `CONFIGURED_NOT_TESTED` | `NOT_STARTED`                  | Credentials received 2026-07-12 (stored in .env.local only); test auth flow in the relevant phase |
-| Supabase PostgreSQL    | Primary database                             | `CONFIGURED_NOT_TESTED` | `NOT_STARTED`                  | Project URL + keys received 2026-07-12 (.env.local); connect and create first migrations in the schema phase |
+| Supabase PostgreSQL    | Primary database                             | `ACTIVE` | Schema applied and RLS-tested 2026-07-12 | 11 migrations live; guest/service-role access verified via PostgREST |
 | Supabase RLS           | Data isolation                               | `NOT_STARTED`        | `NOT_STARTED` under new authority | Run guest, wrong-user, wrong-role, and admin tests           |
 | Supabase server client | Trusted server access                        | `CONFIGURED_NOT_TESTED` | `NOT_STARTED`                  | Service-role key received (server-only, .env.local); wire in app foundation phase |
 | SMS OTP                | OTP delivery only                            | `SETUP_REQUIRED` | `NOT_STARTED`                     | Select provider, configure, test, and retest production      |
@@ -588,22 +588,22 @@ A skill that cannot be safely installed may remain `BLOCKED` without blocking un
 
 ## 14. Database and Migration State
 
-The exact current migration set must be discovered during repository audit.
+### Current migration summary (Phase 2, 2026-07-12)
 
-### Current migration summary
-
-| Field                              | Current value     |
-| ---------------------------------- | ----------------- |
-| Migration directory                | Must be confirmed |
-| Latest migration                   | Must be confirmed |
-| Migration count                    | Must be confirmed |
-| Unapplied migrations               | Must be confirmed |
-| Schema drift                       | Must be checked   |
-| RLS coverage                       | Must be checked   |
-| Missing indexes                    | Must be checked   |
-| Destructive migrations             | Must be checked   |
-| Rollback readiness                 | Must be checked   |
-| Backup before production migration | Required          |
+| Field | Current value |
+| ----- | ------------- |
+| Migration directory | `supabase/migrations/` |
+| Migrations (11, all applied remotely) | `20260712100001_extensions_enums_helpers` (23 enums, helpers) - `...02_identity_profiles` (14 tables) - `...03_locations` (4 tables + hierarchy trigger) - `...04_marketplace` (24 tables) - `...05_inquiries_leads` (10 tables) - `...06_notifications_events` (5 tables) - `...07_internal_platform` (20 tables, append-only audit, record_audit) - `...08_billing` (14 tables, bigint minor units) - `...09_promotions_config` (17 tables) - `...10_rls` (definer helpers + policies on all tables) - `...11_views_seed_foundation` (8 public views, record_status_history, permission/role/provider/flag taxonomy) |
+| Total tables | ~108 in public schema |
+| Unapplied migrations | None - remote matches local (migration list verified) |
+| Schema drift | None - schema exists only through migrations |
+| RLS coverage | Enabled on every public table; server-only tables have no policies (service role only); guest read/write denial verified live via PostgREST |
+| Key constraints | one active public role; unit requires project; location parent-level trigger; lead/inquiry exactly-one-source; available <= total inventory; non-negative money (bigint minor units); soft-delete consistency; unique idempotency keys; unique saved items; consent required on inquiry |
+| Destructive migrations | None |
+| Rollback classification | Forward-fix preferred; rollback = drop objects in reverse migration order |
+| Seed | `supabase/seed.sql` - Gujarat location foundation (real taxonomy), basic plans; no fake users/leads/payments; test accounts only via documented Auth process |
+| Generated types | `src/types/database.ts` (supabase gen types, 5,354 lines) |
+| Backup before production migration | Required |
 
 ### Migration requirements
 
@@ -1041,11 +1041,11 @@ Reason if stopped:
 | Lint                  | `PASS`           | eslint 9 flat config, clean (2026-07-12) |
 | Typecheck             | `PASS`           | tsc --noEmit strict, clean (2026-07-12) |
 | Unit tests            | `PASS`           | vitest: 26/26 architecture tests (2026-07-12) |
-| Integration tests     | `NOT_STARTED`    | No result under new phase system |
+| Integration tests     | `PASS`           | 7 live PostgREST RLS checks (2026-07-12) |
 | End-to-end tests      | `NOT_STARTED`    | No result under new phase system |
 | Production build      | `PASS`           | next build static, clean (2026-07-12) |
-| Migration validation  | `NOT_STARTED`    | No result under new phase system |
-| RLS tests             | `NOT_STARTED`    | No result under new phase system |
+| Migration validation  | `PASS`           | supabase db lint: no schema errors; 11/11 applied (2026-07-12) |
+| RLS tests             | `PASS`           | Guest deny + public views + service-role bypass via PostgREST (2026-07-12) |
 | Accessibility checks  | `NOT_STARTED`    | No result under new phase system |
 | Responsive checks     | `NOT_STARTED`    | No result under new phase system |
 | Console checks        | `NOT_STARTED`    | No result under new phase system |
@@ -1230,6 +1230,35 @@ Before every high-risk phase:
 ---
 
 ## 32. Recent State Changes
+
+### 2026-07-12 — Phase 2 Database Foundation DONE
+
+```text
+Date: 2026-07-12
+Phase: Phase 2 — Database Foundation
+Status: DONE (implementation); Phase 2 verification NOT_STARTED
+Summary: 11 ordered migrations created and applied to the linked Supabase
+project (dftxbjbnnyljuwzcsgzs): 23 authoritative enums; identity/profile
+(14 tables), locations with enforced hierarchy (4), marketplace (24),
+Direct Inquiry + unified Leads with exactly-one-source constraints (10),
+notifications/outbox/jobs (5), internal platform with staff permissions,
+moderation, support, bugs, append-only audit (20), billing in bigint minor
+units (14), promotions + non-secret provider/CMS/SEO/legal config (17).
+RLS enabled on every table with security-definer helpers (no recursion);
+server-only tables have no policies. 8 public-safe views granted to anon.
+record_audit + record_status_history definer functions. Seed: Gujarat
+locations + basic plans (no fake records). Types generated to
+src/types/database.ts. Live RLS tests via PostgREST: guest reads public
+views and plans; profiles/audit/outbox hidden; property insert denied
+(42501); service role reads provider_configurations.
+Checks run: supabase db lint PASS; migration list 11/11 applied;
+lint/typecheck/tests (30/30)/build all PASS
+Live browser work: n/a (database phase); REST API verified instead
+Blockers: none
+Rollback checkpoint: commit b70c690 pre-phase; forward-fix preferred
+Server status: dev server available via npm run dev (launch.json)
+Next prompt: Phase 2 Verification Prompt
+```
 
 ### 2026-07-12 — Phase 1 Manual Verification PASS
 
@@ -1490,7 +1519,7 @@ Next prompt: Phase -1 Manual Verification Prompt
 
 ### Current next action
 
-Run the **Phase 2 Implementation Prompt** (database schema) from:
+Run the **Phase 2 Verification Prompt** from:
 
 ```text
 prompts/00_FULL_PHASE_IMPLEMENTATION_AND_VERIFICATION_PROMPTS.md
@@ -1501,8 +1530,8 @@ Open user question (must be answered before the first application-code phase): d
 Remaining execution sequence:
 
 ```text
-Phase 2 Implementation (database schema)
-→ Phase 2 Verification
+Phase 2 Verification
+→ Phase 3 Implementation
 → Continue phase by phase
 ```
 
@@ -1566,7 +1595,7 @@ A new Claude session must understand the following immediately:
 
 1. All 13 documentation authority files are complete and present.
 2. The Phase -1 repository audit is `PASS` (implemented and verified 2026-07-12): the repository contains documentation only — **no application code exists**. See Section 6.
-3. Phase 1 is PASS (Next.js foundation verified: roles, hosts, routes, services, env, flags, errors; 30 passing tests); Phase 2 (database schema) is next.
+3. Phase 2 implementation is DONE: 11 migrations, ~108 tables, full RLS, 8 public views, seeds, generated types - all applied and RLS-tested against the live Supabase project. Phase 2 verification is next.
 4. No implementation phase is verified under the new authority yet.
 5. Whether a legacy codebase exists elsewhere is an open user decision; treat this repository as greenfield until answered.
 6. The final product uses Owner, Broker, and Builder/Developer public roles.
@@ -1581,7 +1610,7 @@ A new Claude session must understand the following immediately:
 15. Every implementation prompt must be followed by its verification prompt.
 16. Live-browser verification is required.
 17. The development server should remain running after verification when safe.
-18. The next required prompt is the Phase 2 Implementation Prompt in `prompts/00_FULL_PHASE_IMPLEMENTATION_AND_VERIFICATION_PROMPTS.md`.
+18. The next required prompt is the Phase 2 Verification Prompt in `prompts/00_FULL_PHASE_IMPLEMENTATION_AND_VERIFICATION_PROMPTS.md`.
 
 ---
 
