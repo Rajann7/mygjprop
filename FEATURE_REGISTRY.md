@@ -311,9 +311,9 @@ Every feature must avoid:
 
 | ID         | Feature                        | Roles                                            | Data authority                    | Admin visibility                    | Implementation | Verification | Acceptance requirement                                                                          |
 | ---------- | ------------------------------ | ------------------------------------------------ | --------------------------------- | ----------------------------------- | -------------- | ------------ | ----------------------------------------------------------------------------------------------- |
-| `ROLE-001` | Owner public role              | Owner                                            | Supabase profile and role records | Full permission-controlled view     | `NOT_STARTED`  | `NOT_RUN`    | Owner permissions enforced in UI, service, route, and RLS layers                                |
-| `ROLE-002` | Broker public role             | Broker                                           | Supabase profile and role records | Full permission-controlled view     | `NOT_STARTED`  | `NOT_RUN`    | Broker permissions enforced without subordinate role dependency                                 |
-| `ROLE-003` | Builder/Developer public role  | Builder/Developer                                | Supabase profile and role records | Full permission-controlled view     | `NOT_STARTED`  | `NOT_RUN`    | Builder permissions cover projects, units, leads, and approved promotion                        |
+| `ROLE-001` | Owner public role              | Owner                                            | Supabase profile and role records | Full permission-controlled view     | `PARTIAL` | `NOT_RUN`    | Owner permissions enforced in UI, service, route, and RLS layers                                |
+| `ROLE-002` | Broker public role             | Broker                                           | Supabase profile and role records | Full permission-controlled view     | `PARTIAL` | `NOT_RUN`    | Broker permissions enforced without subordinate role dependency                                 |
+| `ROLE-003` | Builder/Developer public role  | Builder/Developer                                | Supabase profile and role records | Full permission-controlled view     | `PARTIAL` | `NOT_RUN`    | Builder permissions cover projects, units, leads, and approved promotion                        |
 | `ROLE-004` | Super Admin role               | Super Admin                                      | Internal staff records            | Full system access with audit       | `NOT_STARTED`  | `NOT_RUN`    | Highest internal access, protected login, all sensitive actions audited                         |
 | `ROLE-005` | Admin role                     | Admin                                            | Internal staff records            | Permission-scoped                   | `NOT_STARTED`  | `NOT_RUN`    | Daily operations restricted by explicit permissions                                             |
 | `ROLE-006` | Staff permission model         | Staff                                            | Permission and assignment records | Super Admin managed                 | `NOT_STARTED`  | `NOT_RUN`    | Read, write, approve, reject, restore, export, billing, and sensitive-data permissions enforced |
@@ -1167,7 +1167,7 @@ The Phase -1 repository audit found **no application code in the repository** �
 | Documentation authority            | `DONE` — all 13 files present                   |
 | Repository audit                   | `PASS` — Phase -1 implemented and verified 2026-07-12 |
 | Skills setup                       | `PASS` — all 9 installed and verified (2026-07-12; caveats in PROJECT_STATE.md Section 13) |
-| Role architecture                  | `NOT_STARTED` under new authority               |
+| Role architecture                  | `PARTIAL` — Phase 1 constants/validators done; RLS and route enforcement pending |
 | Authentication                     | `NOT_STARTED` — no code exists in repository     |
 | Apple-inspired design system       | `NOT_STARTED`                                   |
 | Public marketplace                 | `NOT_STARTED` — no code exists in repository     |

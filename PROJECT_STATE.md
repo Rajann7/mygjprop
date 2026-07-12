@@ -124,14 +124,14 @@ Do not use vague project statuses such as:
 | Product type                         | Gujarat-focused real-estate marketplace and SaaS management platform |
 | Current workstream                   | Phase execution under the new authority system                        |
 | Current documentation phase          | All 13 documentation files complete                                  |
-| Current status                       | Phase 0 `PASS` — implementation and verification complete            |
+| Current status                       | Phase 1 implementation `DONE` — Phase 1 verification pending         |
 | Last completed documentation file    | `prompts/00_FULL_PHASE_IMPLEMENTATION_AND_VERIFICATION_PROMPTS.md`   |
-| Current implementation phase         | Phase 0 — GitHub Skills Inspection and Installation (`PASS`)         |
-| Current verification phase           | Phase 0 Manual Verification (`PASS`, 2026-07-12); Phase -1 `PASS`    |
+| Current implementation phase         | Phase 1 — Architecture Foundation (`DONE`)                           |
+| Current verification phase           | Phase 1 verification `NOT_STARTED`; Phases -1 and 0 `PASS`           |
 | Repository audit under new authority | `PASS` — see Section 6 for findings                                  |
 | Production readiness                 | `NOT_STARTED`                                                        |
 | Deployment status                    | `NOT_STARTED` — no application code exists                           |
-| Development server status            | Not running — no application exists to serve                         |
+| Development server status            | Running — http://localhost:3000 (npm run dev)                        |
 | Last state update                    | 2026-07-12                                                           |
 | State owner                          | Claude Code, supervised by the project owner                         |
 
@@ -1012,10 +1012,10 @@ The repository audit must verify that secrets are absent from:
 
 | Field                           | Current value                                                        |
 | ------------------------------- | -------------------------------------------------------------------- |
-| Server running                  | No — audited 2026-07-12: no application code or dev server exists    |
-| URL                             | None — no application exists                                          |
-| Port                            | None                                                                  |
-| Command                         | None — no `package.json` or start script exists                      |
+| Server running                  | Yes — started during Phase 1 verification work                        |
+| URL                             | http://localhost:3000                                                 |
+| Port                            | 3000                                                                  |
+| Command                         | npm run dev (config: .claude/launch.json mygjprop-dev)                |
 | Last live-browser verification  | Not applicable in Phase -1 (no UI exists)                             |
 | Keep running after verification | Yes, when safe and supported (applies from first implementation phase)|
 | Known server blocker            | No application scaffold exists yet                                    |
@@ -1037,13 +1037,13 @@ Reason if stopped:
 
 | Check                 | Status           | Last result                      |
 | --------------------- | ---------------- | -------------------------------- |
-| Install dependencies  | `NOT_STARTED`    | Repository audit required        |
-| Lint                  | `NOT_STARTED`    | No result under new phase system |
-| Typecheck             | `NOT_STARTED`    | No result under new phase system |
-| Unit tests            | `NOT_STARTED`    | No result under new phase system |
+| Install dependencies  | `PASS`           | 371 packages, npm 11 (2026-07-12) |
+| Lint                  | `PASS`           | eslint 9 flat config, clean (2026-07-12) |
+| Typecheck             | `PASS`           | tsc --noEmit strict, clean (2026-07-12) |
+| Unit tests            | `PASS`           | vitest: 26/26 architecture tests (2026-07-12) |
 | Integration tests     | `NOT_STARTED`    | No result under new phase system |
 | End-to-end tests      | `NOT_STARTED`    | No result under new phase system |
-| Production build      | `NOT_STARTED`    | No result under new phase system |
+| Production build      | `PASS`           | next build static, clean (2026-07-12) |
 | Migration validation  | `NOT_STARTED`    | No result under new phase system |
 | RLS tests             | `NOT_STARTED`    | No result under new phase system |
 | Accessibility checks  | `NOT_STARTED`    | No result under new phase system |
@@ -1230,6 +1230,40 @@ Before every high-risk phase:
 ---
 
 ## 32. Recent State Changes
+
+### 2026-07-12 — Phase 1 Architecture Foundation DONE
+
+```text
+Date: 2026-07-12
+Phase: Phase 1 — Architecture Foundation
+Status: DONE (implementation); Phase 1 verification NOT_STARTED
+Summary: First application code created. Next.js 15 App Router + TypeScript
+strict + Tailwind v4 + Vitest toolchain scaffolded. Implemented: centralized
+role model (public roles exactly owner/broker/builder; internal roles
+separate; validators, area access, display names) in src/lib/roles.ts;
+env-configured four-host architecture with open-redirect prevention and
+loop guards in src/lib/hosts.ts; final typed route map (28 routes across
+public/auth/owner/broker/builder/internal) in src/lib/routes.ts; typed env
+validation with SETUP_REQUIRED provider resolution and safe production
+failure in src/lib/env.ts; server-authoritative feature flags (cannot gate
+security) in src/lib/flags.ts; ServiceResult/DomainError contracts with
+correlation IDs and internal-detail-stripping serialization in
+src/lib/result.ts; 11 domain state unions + transition maps in
+src/types/domain.ts; 21 typed service boundary modules (+base) in
+src/services/ returning honest not-implemented failures. Minimal honest
+root layout + homepage. .env.example expanded (no secrets).
+Checks run: install PASS (371 pkgs), lint PASS, typecheck PASS, tests PASS
+(26/26), production build PASS
+Live browser work: dev server http://localhost:3000; homepage verified at
+320px and 1366px — renders, no console errors, no horizontal overflow
+Bugs found: one test-only type narrowing error, fixed during the phase
+Blockers: none new; legacy-codebase question now moot (greenfield confirmed
+by construction)
+Rollback checkpoint: commit before this phase (see git log); revert the
+Phase 1 commit to roll back
+Server status: Running — http://localhost:3000, port 3000
+Next prompt: Phase 1 Verification Prompt
+```
 
 ### 2026-07-12 — Provider credentials received (Supabase + Razorpay test mode)
 
@@ -1418,7 +1452,7 @@ Next prompt: Phase -1 Manual Verification Prompt
 
 ### Current next action
 
-Run the **Phase 1 Implementation Prompt** from:
+Run the **Phase 1 Verification Prompt** from:
 
 ```text
 prompts/00_FULL_PHASE_IMPLEMENTATION_AND_VERIFICATION_PROMPTS.md
@@ -1429,8 +1463,8 @@ Open user question (must be answered before the first application-code phase): d
 Remaining execution sequence:
 
 ```text
-Phase 1 Implementation
-→ Phase 1 Verification
+Phase 1 Verification
+→ Phase 2 Implementation (database schema)
 → Continue phase by phase
 ```
 
@@ -1494,7 +1528,7 @@ A new Claude session must understand the following immediately:
 
 1. All 13 documentation authority files are complete and present.
 2. The Phase -1 repository audit is `PASS` (implemented and verified 2026-07-12): the repository contains documentation only — **no application code exists**. See Section 6.
-3. Phase 0 is PASS (all 9 skill candidates installed and verified; 67 skills active); Phase 1 implementation is the next required prompt.
+3. Phase 1 implementation is DONE (Next.js foundation, roles, hosts, routes, services, env validation, flags, error contracts, 26 passing tests); Phase 1 verification is next.
 4. No implementation phase is verified under the new authority yet.
 5. Whether a legacy codebase exists elsewhere is an open user decision; treat this repository as greenfield until answered.
 6. The final product uses Owner, Broker, and Builder/Developer public roles.
@@ -1509,7 +1543,7 @@ A new Claude session must understand the following immediately:
 15. Every implementation prompt must be followed by its verification prompt.
 16. Live-browser verification is required.
 17. The development server should remain running after verification when safe.
-18. The next required prompt is the Phase 1 Implementation Prompt in `prompts/00_FULL_PHASE_IMPLEMENTATION_AND_VERIFICATION_PROMPTS.md`.
+18. The next required prompt is the Phase 1 Verification Prompt in `prompts/00_FULL_PHASE_IMPLEMENTATION_AND_VERIFICATION_PROMPTS.md`.
 
 ---
 
