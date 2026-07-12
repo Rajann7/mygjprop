@@ -124,10 +124,10 @@ Do not use vague project statuses such as:
 | Product type                         | Gujarat-focused real-estate marketplace and SaaS management platform |
 | Current workstream                   | Phase execution under the new authority system                        |
 | Current documentation phase          | All 13 documentation files complete                                  |
-| Current status                       | Phase -1 `PASS` — implementation and verification complete           |
+| Current status                       | Phase 0 implementation `DONE` — Phase 0 verification pending         |
 | Last completed documentation file    | `prompts/00_FULL_PHASE_IMPLEMENTATION_AND_VERIFICATION_PROMPTS.md`   |
-| Current implementation phase         | Phase -1 — Repository and Baseline Audit (`PASS`)                    |
-| Current verification phase           | Phase -1 Manual Verification (`PASS`, 2026-07-12)                    |
+| Current implementation phase         | Phase 0 — GitHub Skills Inspection and Installation (`DONE`)         |
+| Current verification phase           | Phase 0 Manual Verification (`NOT_STARTED`); Phase -1 `PASS`         |
 | Repository audit under new authority | `PASS` — see Section 6 for findings                                  |
 | Production readiness                 | `NOT_STARTED`                                                        |
 | Deployment status                    | `NOT_STARTED` — no application code exists                           |
@@ -514,21 +514,40 @@ Raw secrets must never be written here.
 
 ## 13. GitHub Skills State
 
-The project includes the following planned external skills.
+### Phase 0 result (2026-07-12) — all nine candidate repositories inspected live
 
-No skill may be considered installed until the repository and current environment confirm it.
+Environment at inspection time: Windows 10, Node v22.19.0, npm 11.6.2, **Python absent**, **uv absent**.
 
-| Skill                           | Repository                                                    | Current status | Verification  | Planned usage                                         |
-| ------------------------------- | ------------------------------------------------------------- | -------------- | ------------- | ----------------------------------------------------- |
-| BMAD Method                     | `https://github.com/bmad-code-org/BMAD-METHOD`                | `NOT_STARTED`  | `NOT_STARTED` | Product discovery, planning, implementation structure |
-| UI/UX Agent Skill System        | `https://github.com/sergekostenchuk/ui-ux-agent-skill-system` | `NOT_STARTED`  | `NOT_STARTED` | UX architecture and interface reasoning               |
-| Interaction Design Skills       | `https://github.com/rastian/interaction-design-skills`        | `NOT_STARTED`  | `NOT_STARTED` | Navigation, state transitions, interaction behavior   |
-| GitHub Spec Kit                 | `https://github.com/github/spec-kit`                          | `NOT_STARTED`  | `NOT_STARTED` | Specifications, constitution, acceptance criteria     |
-| UI/UX Pro Max Skill             | `https://github.com/nextlevelbuilder/ui-ux-pro-max-skill`     | `NOT_STARTED`  | `NOT_STARTED` | Visual hierarchy and product UI quality               |
-| LottieFiles Motion Design Skill | `https://github.com/LottieFiles/motion-design-skill`          | `NOT_STARTED`  | `NOT_STARTED` | Purposeful motion and feedback                        |
-| Responsive Craft                | `https://github.com/kylezantos/responsive-craft`              | `NOT_STARTED`  | `NOT_STARTED` | Responsive implementation and breakpoint review       |
-| Storymap Skill                  | `https://github.com/MartinForReal/storymap-skill`             | `NOT_STARTED`  | `NOT_STARTED` | User journey mapping and feature slicing              |
-| Shadcn Admin Skill              | `https://github.com/muxiaomu001/shadcn-admin-skill`           | `NOT_STARTED`  | `NOT_STARTED` | Admin information architecture and components         |
+**Installed (project-local, `.claude/skills/`, by manual copy of the official skill directories after full file-level and security inspection — no install scripts executed):**
+
+| Skill | Status | Installed location | Commit | License | Security | Smoke test |
+| ----- | ------ | ------------------ | ------ | ------- | -------- | ---------- |
+| UI/UX Pro Max | `INSTALLATION_APPROVED` — installed | `.claude/skills/ui-ux-pro-max/` | `3da52ff` | MIT | PASS — local CSV design database, no network/telemetry; optional Python search scripts degrade gracefully (Python absent; CSVs remain directly readable) | PASS |
+| LottieFiles Motion Design | `INSTALLATION_APPROVED` — installed | `.claude/skills/motion-design/` | `f9a8a04` | MIT | PASS — pure Markdown, no scripts | PASS |
+| Responsive Craft | `INSTALLATION_APPROVED` — installed | `.claude/skills/responsive-craft/` | `4863701` | MIT (README declaration; repo has no LICENSE file — noted) | PASS — Node scripts are localhost-only preview/snapshot tools, invoked only on demand | PASS |
+| Storymap (user-story-mapping) | `INSTALLATION_APPROVED` — installed | `.claude/skills/user-story-mapping/` | `35cf8a1` | MIT | PASS — Markdown skill; optional Python exporters unavailable until Python is installed | PASS |
+
+**Not installed:**
+
+| Skill | Status | Reason |
+| ----- | ------ | ------ |
+| BMAD Method | `PARTIALLY_COMPATIBLE` + `SETUP_REQUIRED` | MIT, very active; but installer requires Python 3.10+ and uv (both absent), writes a large agent/workflow footprint, and its PRD/architecture generation would create a parallel authority system conflicting with the 13-file documentation authority. Revisit only with explicit user approval and constrained scope. |
+| GitHub Spec Kit | `PARTIALLY_COMPATIBLE` + `SETUP_REQUIRED` | MIT, official GitHub project; requires uv (absent); `specify init` scaffolds its own constitution/spec system — parallel-authority conflict. Acceptance-criteria templates may be borrowed conceptually without installation. |
+| Interaction Design Skills | `LICENSE_REVIEW_REQUIRED` | Clean Markdown skill, but the repository contains no LICENSE file and no license statement — commercial-use rights are not granted. Do not install until the author adds a license or the user accepts the risk. |
+| UI/UX Agent Skill System | `SECURITY_REVIEW_REQUIRED` | Apache-2.0 but 4 stars, global npm CLI with `bin/`, `dist/`, adapters, and `.env.example` (potential credential surface); capability fully overlaps the installed UI/UX Pro Max. Excluded to avoid conflicting UX systems. |
+| Shadcn Admin Skill | `PARTIALLY_COMPATIBLE` | MIT but 0 stars; prompts written in Chinese; scaffolding scripts target the standalone Vite/TanStack `shadcn-admin` template, not Next.js App Router. Re-evaluate at the Admin phases; do not install now. |
+
+### Skill responsibility map (Phases 1–18)
+
+* Planning / journey phases → `user-story-mapping`
+* Design system, UI quality, and Admin UI phases → `ui-ux-pro-max` (sole UX-intelligence skill; overlapping candidates excluded to prevent conflicting systems)
+* Responsive implementation and width verification phases → `responsive-craft`
+* Motion and interaction-feedback phases → `motion-design`
+* No skill overrides the 13-file authority, roles, Direct Inquiry model, security, or RLS rules.
+
+### Rollback
+
+All four skills are plain directories. Rollback: `git rm -r .claude/skills/<name>` (or `git revert` the Phase 0 commit). No global packages, registries, PATH entries, or system state were modified. Pre-install checkpoint: `fa2d7ef`.
 
 ### Skill installation state values
 
@@ -1113,7 +1132,8 @@ None for generating the current 13-file documentation set.
 | New master documents not yet complete      | `DONE`           | All 13 files confirmed present 2026-07-12               |
 | Repository not audited under new authority | `PASS`           | Phase -1 audit completed and verified 2026-07-12        |
 | No application code exists                 | `NOT_STARTED`    | Greenfield build begins with the first implementation phase; if a legacy codebase exists elsewhere, the user must provide its location |
-| External skills not audited                | `BLOCKED`        | Run Phase 0                                             |
+| External skills not audited                | `DONE`           | Phase 0 completed 2026-07-12; verification pending      |
+| Python 3.10+ and uv not installed          | `SETUP_REQUIRED` | Only needed if BMAD Method or Spec Kit is later approved, or for optional storymap/ui-ux-pro-max helper scripts |
 | Final provider credentials unavailable     | `SETUP_REQUIRED` | User will provide during provider and production phases |
 | Hosting access unavailable                 | `SETUP_REQUIRED` | User will provide                                       |
 | Domain and DNS access unavailable          | `SETUP_REQUIRED` | User will provide                                       |
@@ -1206,6 +1226,42 @@ Before every high-risk phase:
 
 ## 32. Recent State Changes
 
+### 2026-07-12 — Phase 0 GitHub Skills Inspection and Installation DONE
+
+```text
+Date: 2026-07-12
+Phase: Phase 0 — GitHub Skills Inspection and Installation
+Status: DONE (implementation); Phase 0 verification NOT_STARTED
+Summary: All nine candidate repositories inspected live (existence, license,
+activity, install method, scripts, security, telemetry, overlap, Windows and
+stack compatibility). Four skills approved and installed project-locally in
+.claude/skills/ by manual copy of official skill directories with licenses
+(ui-ux-pro-max @3da52ff, motion-design @f9a8a04, responsive-craft @4863701,
+user-story-mapping @35cf8a1). Five candidates not installed: BMAD Method and
+Spec Kit (SETUP_REQUIRED: Python/uv absent; parallel-authority conflict),
+Interaction Design Skills (LICENSE_REVIEW_REQUIRED: no license), UI/UX Agent
+Skill System (SECURITY_REVIEW_REQUIRED + duplicate capability), Shadcn Admin
+Skill (PARTIALLY_COMPATIBLE: targets Vite/TanStack template). Smoke tests
+performed on all four installed skills. Skill responsibility map recorded in
+Section 13. No product scope changed; no application code written.
+Skills used: None (this phase installs them)
+Files changed: .claude/skills/** (4 skills + licenses), PROJECT_STATE.md,
+FEATURE_REGISTRY.md
+Migrations: None
+RLS changes: None
+Providers changed: None
+Checks run: lint/typecheck/tests/build not applicable — no project toolchain
+exists yet; skill files are Markdown/CSV/local scripts, frontmatter validated
+Live browser work: Not applicable — no application exists
+Bugs found: None
+Blockers: Python 3.10+/uv absent (only matters for BMAD/Spec Kit and optional
+helper scripts); legacy-codebase question still open
+Rollback checkpoint: fa2d7ef (pre-install); remove .claude/skills/<name> or
+revert the Phase 0 commit
+Server status: Not running — no application exists
+Next prompt: Phase 0 Manual Verification Prompt
+```
+
 ### 2026-07-12 — Phase -1 Manual Verification PASS
 
 ```text
@@ -1277,19 +1333,19 @@ Next prompt: Phase -1 Manual Verification Prompt
 
 ### Current next action
 
-Run the **Phase 0 Implementation Prompt** (GitHub skills inspection and installation) from:
+Run the **Phase 0 Manual Verification Prompt** from:
 
 ```text
 prompts/00_FULL_PHASE_IMPLEMENTATION_AND_VERIFICATION_PROMPTS.md
 ```
 
-Open user question (does not block Phase 0, must be answered before the first application-code phase): does a legacy My Gujarat Property application codebase exist elsewhere, or is this a greenfield build? (See Section 6 risk register.)
+Open user question (must be answered before the first application-code phase): does a legacy My Gujarat Property application codebase exist elsewhere, or is this a greenfield build? (See Section 6 risk register.)
 
 Remaining execution sequence:
 
 ```text
-Phase 0 Implementation
-→ Phase 0 Verification
+Phase 0 Verification
+→ Phase 1 Implementation
 → Continue phase by phase
 ```
 
@@ -1353,7 +1409,7 @@ A new Claude session must understand the following immediately:
 
 1. All 13 documentation authority files are complete and present.
 2. The Phase -1 repository audit is `PASS` (implemented and verified 2026-07-12): the repository contains documentation only — **no application code exists**. See Section 6.
-3. Phase 0 (GitHub skills inspection and installation) is the next required prompt.
+3. Phase 0 implementation is DONE (four skills installed in .claude/skills/); Phase 0 manual verification is the next required prompt.
 4. No implementation phase is verified under the new authority yet.
 5. Whether a legacy codebase exists elsewhere is an open user decision; treat this repository as greenfield until answered.
 6. The final product uses Owner, Broker, and Builder/Developer public roles.
@@ -1368,7 +1424,7 @@ A new Claude session must understand the following immediately:
 15. Every implementation prompt must be followed by its verification prompt.
 16. Live-browser verification is required.
 17. The development server should remain running after verification when safe.
-18. The next required prompt is the Phase 0 Implementation Prompt in `prompts/00_FULL_PHASE_IMPLEMENTATION_AND_VERIFICATION_PROMPTS.md`.
+18. The next required prompt is the Phase 0 Manual Verification Prompt in `prompts/00_FULL_PHASE_IMPLEMENTATION_AND_VERIFICATION_PROMPTS.md`.
 
 ---
 

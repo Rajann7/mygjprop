@@ -950,23 +950,25 @@ Every feature must avoid:
 
 # 30. Skills and Agent Workflow Registry
 
+Phase 0 result (2026-07-12): four skills installed project-locally in `.claude/skills/` (ui-ux-pro-max @3da52ff, motion-design @f9a8a04, responsive-craft @4863701, user-story-mapping @35cf8a1); five candidates not installed (statuses, reasons, responsibility map, and rollback in `PROJECT_STATE.md` Section 13). `DONE` below means installed and smoke-tested, pending Phase 0 manual verification.
+
 | ID          | Skill                           | Repository                                                    | Planned role                                          | Implementation | Verification | Acceptance requirement                                           |
 | ----------- | ------------------------------- | ------------------------------------------------------------- | ----------------------------------------------------- | -------------- | ------------ | ---------------------------------------------------------------- |
-| `SKILL-001` | BMAD Method                     | `https://github.com/bmad-code-org/BMAD-METHOD`                | Product discovery, planning, implementation structure | `NOT_STARTED`  | `NOT_RUN`    | Current repository inspected, safely installed, smoke tested     |
-| `SKILL-002` | UI/UX Agent Skill System        | `https://github.com/sergekostenchuk/ui-ux-agent-skill-system` | UX architecture and interface reasoning               | `NOT_STARTED`  | `NOT_RUN`    | Compatible skill invoked in UX phases                            |
-| `SKILL-003` | Interaction Design Skills       | `https://github.com/rastian/interaction-design-skills`        | State transitions, navigation, interaction semantics  | `NOT_STARTED`  | `NOT_RUN`    | Used for navigation matrices and journey audits                  |
-| `SKILL-004` | GitHub Spec Kit                 | `https://github.com/github/spec-kit`                          | Specifications and acceptance criteria                | `NOT_STARTED`  | `NOT_RUN`    | Project authority remains higher than generated specifications   |
-| `SKILL-005` | UI/UX Pro Max Skill             | `https://github.com/nextlevelbuilder/ui-ux-pro-max-skill`     | Visual hierarchy and product UI quality               | `NOT_STARTED`  | `NOT_RUN`    | Supports original Apple-inspired UI without copying              |
-| `SKILL-006` | LottieFiles Motion Design Skill | `https://github.com/LottieFiles/motion-design-skill`          | Purposeful accessible motion                          | `NOT_STARTED`  | `NOT_RUN`    | Reduced-motion-safe and performance-safe usage                   |
-| `SKILL-007` | Responsive Craft                | `https://github.com/kylezantos/responsive-craft`              | Mobile, tablet, desktop responsive implementation     | `NOT_STARTED`  | `NOT_RUN`    | Required widths tested                                           |
-| `SKILL-008` | Storymap Skill                  | `https://github.com/MartinForReal/storymap-skill`             | User journeys and feature slicing                     | `NOT_STARTED`  | `NOT_RUN`    | Role journeys and deep drill-down map created                    |
-| `SKILL-009` | Shadcn Admin Skill              | `https://github.com/muxiaomu001/shadcn-admin-skill`           | Admin architecture and components                     | `NOT_STARTED`  | `NOT_RUN`    | Used only where compatible with final Admin rules                |
-| `SKILL-010` | Skill security review           | All external skills                                           | Installation safety                                   | `NOT_STARTED`  | `NOT_RUN`    | Install scripts, dependencies, permissions, license reviewed     |
-| `SKILL-011` | Skill compatibility review      | All external skills                                           | Project compatibility                                 | `NOT_STARTED`  | `NOT_RUN`    | Next.js, TypeScript, Tailwind, ShadCN, Claude Code compatibility |
-| `SKILL-012` | Skill conflict resolution       | All external skills                                           | Authority protection                                  | `NOT_STARTED`  | `NOT_RUN`    | Conflicting skill instruction rejected or isolated               |
-| `SKILL-013` | Skill version tracking          | All installed skills                                          | Reproducibility                                       | `NOT_STARTED`  | `NOT_RUN`    | Commit/version and install path recorded                         |
-| `SKILL-014` | Skill smoke testing             | All installed skills                                          | Operational validation                                | `NOT_STARTED`  | `NOT_RUN`    | Skill can be invoked before phase usage                          |
-| `SKILL-015` | Skill rollback                  | All installed skills                                          | Recovery                                              | `NOT_STARTED`  | `NOT_RUN`    | Installation can be safely reverted                              |
+| `SKILL-001` | BMAD Method                     | `https://github.com/bmad-code-org/BMAD-METHOD`                | Product discovery, planning, implementation structure | `SETUP_REQUIRED` | `NOT_RUN`    | Current repository inspected, safely installed, smoke tested     |
+| `SKILL-002` | UI/UX Agent Skill System        | `https://github.com/sergekostenchuk/ui-ux-agent-skill-system` | UX architecture and interface reasoning               | `BLOCKED` | `NOT_RUN`    | Compatible skill invoked in UX phases                            |
+| `SKILL-003` | Interaction Design Skills       | `https://github.com/rastian/interaction-design-skills`        | State transitions, navigation, interaction semantics  | `BLOCKED` | `NOT_RUN`    | Used for navigation matrices and journey audits                  |
+| `SKILL-004` | GitHub Spec Kit                 | `https://github.com/github/spec-kit`                          | Specifications and acceptance criteria                | `SETUP_REQUIRED` | `NOT_RUN`    | Project authority remains higher than generated specifications   |
+| `SKILL-005` | UI/UX Pro Max Skill             | `https://github.com/nextlevelbuilder/ui-ux-pro-max-skill`     | Visual hierarchy and product UI quality               | `DONE` | `NOT_RUN`    | Supports original Apple-inspired UI without copying              |
+| `SKILL-006` | LottieFiles Motion Design Skill | `https://github.com/LottieFiles/motion-design-skill`          | Purposeful accessible motion                          | `DONE` | `NOT_RUN`    | Reduced-motion-safe and performance-safe usage                   |
+| `SKILL-007` | Responsive Craft                | `https://github.com/kylezantos/responsive-craft`              | Mobile, tablet, desktop responsive implementation     | `DONE` | `NOT_RUN`    | Required widths tested                                           |
+| `SKILL-008` | Storymap Skill                  | `https://github.com/MartinForReal/storymap-skill`             | User journeys and feature slicing                     | `DONE` | `NOT_RUN`    | Role journeys and deep drill-down map created                    |
+| `SKILL-009` | Shadcn Admin Skill              | `https://github.com/muxiaomu001/shadcn-admin-skill`           | Admin architecture and components                     | `BLOCKED` | `NOT_RUN`    | Used only where compatible with final Admin rules                |
+| `SKILL-010` | Skill security review           | All external skills                                           | Installation safety                                   | `DONE` | `NOT_RUN`    | Install scripts, dependencies, permissions, license reviewed     |
+| `SKILL-011` | Skill compatibility review      | All external skills                                           | Project compatibility                                 | `DONE` | `NOT_RUN`    | Next.js, TypeScript, Tailwind, ShadCN, Claude Code compatibility |
+| `SKILL-012` | Skill conflict resolution       | All external skills                                           | Authority protection                                  | `DONE` | `NOT_RUN`    | Conflicting skill instruction rejected or isolated               |
+| `SKILL-013` | Skill version tracking          | All installed skills                                          | Reproducibility                                       | `DONE` | `NOT_RUN`    | Commit/version and install path recorded                         |
+| `SKILL-014` | Skill smoke testing             | All installed skills                                          | Operational validation                                | `DONE` | `NOT_RUN`    | Skill can be invoked before phase usage                          |
+| `SKILL-015` | Skill rollback                  | All installed skills                                          | Recovery                                              | `DONE` | `NOT_RUN`    | Installation can be safely reverted                              |
 
 ---
 
@@ -1164,7 +1166,7 @@ The Phase -1 repository audit found **no application code in the repository** �
 | ---------------------------------- | ----------------------------------------------- |
 | Documentation authority            | `DONE` — all 13 files present                   |
 | Repository audit                   | `PASS` — Phase -1 implemented and verified 2026-07-12 |
-| Skills setup                       | `NOT_STARTED`                                   |
+| Skills setup                       | `DONE` — 4 installed, 5 excluded (2026-07-12)   |
 | Role architecture                  | `NOT_STARTED` under new authority               |
 | Authentication                     | `NOT_STARTED` — no code exists in repository     |
 | Apple-inspired design system       | `NOT_STARTED`                                   |
