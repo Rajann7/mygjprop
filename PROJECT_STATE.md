@@ -124,11 +124,11 @@ Do not use vague project statuses such as:
 | Product type                         | Gujarat-focused real-estate marketplace and SaaS management platform |
 | Current workstream                   | Phase execution under the new authority system                        |
 | Current documentation phase          | All 13 documentation files complete                                  |
-| Current status                       | Phase -1 implementation `DONE` — Phase -1 verification pending       |
+| Current status                       | Phase -1 `PASS` — implementation and verification complete           |
 | Last completed documentation file    | `prompts/00_FULL_PHASE_IMPLEMENTATION_AND_VERIFICATION_PROMPTS.md`   |
-| Current implementation phase         | Phase -1 — Repository and Baseline Audit (`DONE`)                    |
-| Current verification phase           | Phase -1 Manual Verification (`NOT_STARTED`)                         |
-| Repository audit under new authority | `DONE` — see Section 6 for findings                                  |
+| Current implementation phase         | Phase -1 — Repository and Baseline Audit (`PASS`)                    |
+| Current verification phase           | Phase -1 Manual Verification (`PASS`, 2026-07-12)                    |
+| Repository audit under new authority | `PASS` — see Section 6 for findings                                  |
 | Production readiness                 | `NOT_STARTED`                                                        |
 | Deployment status                    | `NOT_STARTED` — no application code exists                           |
 | Development server status            | Not running — no application exists to serve                         |
@@ -1111,7 +1111,7 @@ None for generating the current 13-file documentation set.
 | Blocker                                    | Status           | Resolution                                              |
 | ------------------------------------------ | ---------------- | ------------------------------------------------------- |
 | New master documents not yet complete      | `DONE`           | All 13 files confirmed present 2026-07-12               |
-| Repository not audited under new authority | `DONE`           | Phase -1 audit completed 2026-07-12; verification pending |
+| Repository not audited under new authority | `PASS`           | Phase -1 audit completed and verified 2026-07-12        |
 | No application code exists                 | `NOT_STARTED`    | Greenfield build begins with the first implementation phase; if a legacy codebase exists elsewhere, the user must provide its location |
 | External skills not audited                | `BLOCKED`        | Run Phase 0                                             |
 | Final provider credentials unavailable     | `SETUP_REQUIRED` | User will provide during provider and production phases |
@@ -1205,6 +1205,31 @@ Before every high-risk phase:
 
 ## 32. Recent State Changes
 
+### 2026-07-12 — Phase -1 Manual Verification PASS
+
+```text
+Date: 2026-07-12
+Verification phase: Phase -1 Manual Verification
+Result: PASS
+Automated checks: git status (clean), branch (master), checkpoint (eb89ea3
+reachable, follow-up b493f5f); lint/typecheck/tests/build confirmed not
+applicable — no package.json, lockfile, or toolchain exists to run them
+Routes tested: None exist — route inventory verified empty against filesystem
+Widths tested: Not applicable — no UI exists
+Journeys tested: Not applicable — no application exists
+Permissions tested: Not applicable — no auth or routes exist
+RLS tested: Not applicable — no supabase/ directory or schema exists
+Accessibility: Not applicable
+Console and network: Not applicable — no server exists
+Bugs fixed: None required — audit matched the repository exactly
+Remaining blockers: No application code; legacy-codebase question open;
+Phase 0 skills audit not run; provider credentials outstanding
+Documentation updated: PROJECT_STATE.md Sections 4, 28, 32, 33, 35;
+FEATURE_REGISTRY.md Section 35
+Server status: Not running — no application exists (recorded reason)
+Next prompt: Phase 0 Implementation Prompt
+```
+
 ### 2026-07-12 — Phase -1 Repository and Baseline Audit Completed
 
 ```text
@@ -1251,19 +1276,18 @@ Next prompt: Phase -1 Manual Verification Prompt
 
 ### Current next action
 
-Run the **Phase -1 Manual Verification Prompt** from:
+Run the **Phase 0 Implementation Prompt** (GitHub skills inspection and installation) from:
 
 ```text
 prompts/00_FULL_PHASE_IMPLEMENTATION_AND_VERIFICATION_PROMPTS.md
 ```
 
-Before Phase 0 begins, the user must also answer one open question: does a legacy My Gujarat Property application codebase exist elsewhere, or is this a greenfield build? (See Section 6 risk register.)
+Open user question (does not block Phase 0, must be answered before the first application-code phase): does a legacy My Gujarat Property application codebase exist elsewhere, or is this a greenfield build? (See Section 6 risk register.)
 
 Remaining execution sequence:
 
 ```text
-Phase -1 Verification
-→ Phase 0 Implementation
+Phase 0 Implementation
 → Phase 0 Verification
 → Continue phase by phase
 ```
@@ -1327,8 +1351,8 @@ Next prompt:
 A new Claude session must understand the following immediately:
 
 1. All 13 documentation authority files are complete and present.
-2. The Phase -1 repository audit is `DONE` (2026-07-12): the repository contains documentation only — **no application code exists**. See Section 6.
-3. Phase -1 manual verification is the next required prompt.
+2. The Phase -1 repository audit is `PASS` (implemented and verified 2026-07-12): the repository contains documentation only — **no application code exists**. See Section 6.
+3. Phase 0 (GitHub skills inspection and installation) is the next required prompt.
 4. No implementation phase is verified under the new authority yet.
 5. Whether a legacy codebase exists elsewhere is an open user decision; treat this repository as greenfield until answered.
 6. The final product uses Owner, Broker, and Builder/Developer public roles.
@@ -1343,7 +1367,7 @@ A new Claude session must understand the following immediately:
 15. Every implementation prompt must be followed by its verification prompt.
 16. Live-browser verification is required.
 17. The development server should remain running after verification when safe.
-18. The next required prompt is the Phase -1 Manual Verification Prompt in `prompts/00_FULL_PHASE_IMPLEMENTATION_AND_VERIFICATION_PROMPTS.md`.
+18. The next required prompt is the Phase 0 Implementation Prompt in `prompts/00_FULL_PHASE_IMPLEMENTATION_AND_VERIFICATION_PROMPTS.md`.
 
 ---
 
