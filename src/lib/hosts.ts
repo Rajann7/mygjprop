@@ -113,6 +113,15 @@ export function isSafeIntendedRoute(value: unknown): value is string {
   if (!value.startsWith("/")) return false;
   if (value.startsWith("//") || value.startsWith("/\\")) return false;
   if (value.includes("\\") || value.includes("\n") || value.includes("\r")) return false;
+  // Percent-encoded variants of the same vectors (\, CR, LF, leading //).
+  let decoded: string;
+  try {
+    decoded = decodeURIComponent(value);
+  } catch {
+    return false; // malformed encoding is never a safe route
+  }
+  if (decoded.includes("\\") || decoded.includes("\n") || decoded.includes("\r")) return false;
+  if (decoded.startsWith("//")) return false;
   return true;
 }
 

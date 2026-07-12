@@ -84,7 +84,12 @@ export function validateEnv(
   const missingRequired: string[] = [];
   for (const key of Object.keys(PROVIDER_ENV_GROUPS) as ProviderKey[]) {
     const vars = PROVIDER_ENV_GROUPS[key];
-    const missing = vars.filter((v) => !nonEmpty.safeParse(source[v]).success);
+    // URL-shaped variables must actually be URLs; a malformed value is a
+    // configuration error, not a "configured" provider.
+    const missing = vars.filter((v) => {
+      const schema = v.endsWith("_URL") || v.endsWith("_DSN") ? url : nonEmpty;
+      return !schema.safeParse(source[v]).success;
+    });
     if (missing.length === 0) {
       providers[key] = "CONFIGURED_NOT_TESTED";
     } else {

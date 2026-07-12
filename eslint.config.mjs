@@ -11,6 +11,7 @@ const config = [
       "_bmad/**",
       ".specify/**",
       ".claude/**",
+      "next-env.d.ts",
     ],
   },
   ...compat.extends("next/core-web-vitals", "next/typescript"),

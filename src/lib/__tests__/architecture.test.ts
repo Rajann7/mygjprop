@@ -13,6 +13,7 @@ import {
   isSafeIntendedRoute,
   safeCrossHostRedirect,
   detectAreaFromHost,
+  canonicalPublicHost,
 } from "@/lib/hosts";
 import { validateEnv, ConfigurationError } from "@/lib/env";
 import { evaluateFlag, isFeatureFlagKey } from "@/lib/flags";
@@ -76,6 +77,12 @@ describe("role-to-host mapping", () => {
     expect(detectAreaFromHost(prod, "evil.example")).toBeNull();
   });
 
+  it("generates the canonical public URL from the public host only", () => {
+    expect(canonicalPublicHost(prod).origin).toBe("https://mygujaratproperty.example");
+    const dev = resolveHosts({ stage: "development" });
+    expect(canonicalPublicHost(dev).origin).toBe("http://localhost:3000");
+  });
+
   it("falls back to a single localhost origin in development", () => {
     const dev = resolveHosts({ stage: "development" });
     expect(dev.singleOrigin).toBe(true);
@@ -105,6 +112,12 @@ describe("safe redirect validation", () => {
       "owner/properties",
       "/a\nb",
     ]) {
+      expect(isSafeIntendedRoute(bad)).toBe(false);
+    }
+  });
+
+  it("rejects percent-encoded redirect vectors", () => {
+    for (const bad of ["/%5Cevil.example", "/%5c%5cevil", "/a%0d%0ab", "/%2F%2Fevil.example", "/%E0%A4%A"]) {
       expect(isSafeIntendedRoute(bad)).toBe(false);
     }
   });
@@ -147,6 +160,22 @@ describe("environment validation", () => {
 
   it("requires the public app URL outside development", () => {
     expect(() => validateEnv({ NODE_ENV: "production" })).toThrow(ConfigurationError);
+  });
+
+  it("rejects a malformed application URL", () => {
+    expect(() =>
+      validateEnv({ NODE_ENV: "development", NEXT_PUBLIC_APP_URL: "not-a-url" }),
+    ).toThrow(ConfigurationError);
+  });
+
+  it("treats a malformed Supabase URL as unconfigured, not configured", () => {
+    const env = validateEnv({
+      NODE_ENV: "development",
+      NEXT_PUBLIC_SUPABASE_URL: "garbage-without-scheme",
+      NEXT_PUBLIC_SUPABASE_ANON_KEY: "anon",
+      SUPABASE_SERVICE_ROLE_KEY: "service",
+    });
+    expect(env.providers.supabase).toBe("SETUP_REQUIRED");
   });
 });
 

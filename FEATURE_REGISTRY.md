@@ -1079,6 +1079,38 @@ Each relationship must be implemented, permission-protected, responsive, and ver
 
 ---
 
+
+## Phase 1 exact route map (source of truth: `src/lib/routes.ts`)
+
+| Route | Area / host | Access | Purpose | State |
+| ----- | ----------- | ------ | ------- | ----- |
+| `/` | public | public | Homepage with city selector | Implemented (foundation shell) |
+| `/search` | public | public | Search results | Planned |
+| `/property/[slug]` | public | public | Property detail | Planned |
+| `/project/[slug]` | public | public | Builder project detail | Planned |
+| `/city/[city]` | public | public | City SEO landing page | Planned (flag: city_seo_pages) |
+| `/profile/[slug]` | public | public | Public Broker/Builder profile | Planned |
+| `/pricing` | public | public | Plans and pricing | Planned |
+| `/help` | public | public | Help and support | Planned |
+| `/blog`, `/blog/[slug]` | public | public | Blog (flag: blog) | Planned |
+| `/legal/terms`, `/legal/privacy` | public | public | Legal pages | Planned |
+| `/login` | auth | guest_only | Mobile-number OTP login | Planned |
+| `/register` | auth | guest_only | Three-role registration | Planned |
+| `/owner` | owner (public host section) | role: owner | Owner dashboard | Planned |
+| `/owner/properties` | owner | role: owner | Owner property list | Planned |
+| `/owner/leads` | owner | role: owner | Owner Leads workspace | Planned |
+| `/` | broker host | role: broker | Broker dashboard | Planned |
+| `/listings` | broker host | role: broker | Broker listings | Planned |
+| `/leads` | broker host | role: broker | Broker Leads workspace | Planned |
+| `/` | builder host | role: builder | Builder dashboard | Planned |
+| `/projects` | builder host | role: builder | Builder projects | Planned |
+| `/leads` | builder host | role: builder | Builder Leads workspace | Planned |
+| `/` | internal host | internal | Admin overview | Planned |
+| `/users` | internal host | internal | User management | Planned |
+| `/moderation` | internal host | internal | Moderation queues | Planned |
+| `/audit` | internal host | internal | Audit log | Planned |
+
+Rules verified in Phase 1: public canonical pages exist only on the public host; role hosts never duplicate canonical public content; planned routes are not linked or rendered anywhere; access rules are typed per route.
 # 34. Feature Release Gates
 
 A feature may move to `PASS` only when all applicable gates succeed.

@@ -124,10 +124,10 @@ Do not use vague project statuses such as:
 | Product type                         | Gujarat-focused real-estate marketplace and SaaS management platform |
 | Current workstream                   | Phase execution under the new authority system                        |
 | Current documentation phase          | All 13 documentation files complete                                  |
-| Current status                       | Phase 1 implementation `DONE` — Phase 1 verification pending         |
+| Current status                       | Phase 1 `PASS` — implementation and verification complete            |
 | Last completed documentation file    | `prompts/00_FULL_PHASE_IMPLEMENTATION_AND_VERIFICATION_PROMPTS.md`   |
-| Current implementation phase         | Phase 1 — Architecture Foundation (`DONE`)                           |
-| Current verification phase           | Phase 1 verification `NOT_STARTED`; Phases -1 and 0 `PASS`           |
+| Current implementation phase         | Phase 1 — Architecture Foundation (`PASS`)                           |
+| Current verification phase           | Phase 1 verification `PASS` (2026-07-12); Phases -1 and 0 `PASS`     |
 | Repository audit under new authority | `PASS` — see Section 6 for findings                                  |
 | Production readiness                 | `NOT_STARTED`                                                        |
 | Deployment status                    | `NOT_STARTED` — no application code exists                           |
@@ -1231,6 +1231,44 @@ Before every high-risk phase:
 
 ## 32. Recent State Changes
 
+### 2026-07-12 — Phase 1 Manual Verification PASS
+
+```text
+Date: 2026-07-12
+Verification phase: Phase 1 — Architecture Foundation
+Result: PASS (after fixing 2 defects found during verification)
+Automated checks: lint PASS (after excluding generated next-env.d.ts),
+typecheck PASS, tests PASS 30/30 (4 new verification tests added),
+production build PASS
+Defects found and fixed: (1) malformed Supabase/monitoring URLs were
+accepted as configured — env validator now URL-validates *_URL/*_DSN
+variables; (2) percent-encoded redirect vectors (%5C, %0d%0a, %2F%2F,
+malformed encodings) bypassed isSafeIntendedRoute — decode-check added.
+Roles verified: owner/broker/builder valid; invalid and internal roles
+rejected by the public validator; display names; area access; role-to-host
+and role-home mapping (tests)
+Host routing verified: public/broker/builder/internal host detection,
+wrong-role host → null, dev single-origin fallback, canonical public URL,
+invalid/external/encoded redirect rejection, loop prevention (tests)
+Route inventory verified: 28-route typed map recorded in
+FEATURE_REGISTRY.md; only "/" implemented; live 404 confirmed for planned
+route (/owner/properties) — no placeholder features; public canonical
+routes exist only on the public host
+Environment verified: dev config, missing optional provider →
+SETUP_REQUIRED, missing production-required → ConfigurationError,
+malformed URLs rejected, malformed Supabase config → SETUP_REQUIRED;
+client bundle scanned — no secret values or service_role material in
+.next/static
+Service boundaries verified: src/app imports no services or env module;
+all 22 service interfaces compile under strict TypeScript
+Live browser: homepage renders at http://localhost:3000, zero console
+errors; 404 behavior verified by direct URL
+No feature incorrectly marked PASS (registry ROLE rows remain PARTIAL —
+enforcement arrives with RLS and middleware phases)
+Server status: Running — http://localhost:3000
+Next prompt: Phase 2 Implementation Prompt (database schema)
+```
+
 ### 2026-07-12 — Phase 1 Architecture Foundation DONE
 
 ```text
@@ -1452,7 +1490,7 @@ Next prompt: Phase -1 Manual Verification Prompt
 
 ### Current next action
 
-Run the **Phase 1 Verification Prompt** from:
+Run the **Phase 2 Implementation Prompt** (database schema) from:
 
 ```text
 prompts/00_FULL_PHASE_IMPLEMENTATION_AND_VERIFICATION_PROMPTS.md
@@ -1463,8 +1501,8 @@ Open user question (must be answered before the first application-code phase): d
 Remaining execution sequence:
 
 ```text
-Phase 1 Verification
-→ Phase 2 Implementation (database schema)
+Phase 2 Implementation (database schema)
+→ Phase 2 Verification
 → Continue phase by phase
 ```
 
@@ -1528,7 +1566,7 @@ A new Claude session must understand the following immediately:
 
 1. All 13 documentation authority files are complete and present.
 2. The Phase -1 repository audit is `PASS` (implemented and verified 2026-07-12): the repository contains documentation only — **no application code exists**. See Section 6.
-3. Phase 1 implementation is DONE (Next.js foundation, roles, hosts, routes, services, env validation, flags, error contracts, 26 passing tests); Phase 1 verification is next.
+3. Phase 1 is PASS (Next.js foundation verified: roles, hosts, routes, services, env, flags, errors; 30 passing tests); Phase 2 (database schema) is next.
 4. No implementation phase is verified under the new authority yet.
 5. Whether a legacy codebase exists elsewhere is an open user decision; treat this repository as greenfield until answered.
 6. The final product uses Owner, Broker, and Builder/Developer public roles.
@@ -1543,7 +1581,7 @@ A new Claude session must understand the following immediately:
 15. Every implementation prompt must be followed by its verification prompt.
 16. Live-browser verification is required.
 17. The development server should remain running after verification when safe.
-18. The next required prompt is the Phase 1 Verification Prompt in `prompts/00_FULL_PHASE_IMPLEMENTATION_AND_VERIFICATION_PROMPTS.md`.
+18. The next required prompt is the Phase 2 Implementation Prompt in `prompts/00_FULL_PHASE_IMPLEMENTATION_AND_VERIFICATION_PROMPTS.md`.
 
 ---
 
