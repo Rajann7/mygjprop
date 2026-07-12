@@ -527,27 +527,32 @@ Environment at inspection time: Windows 10, Node v22.19.0, npm 11.6.2, **Python 
 | Responsive Craft | `INSTALLATION_APPROVED` — installed | `.claude/skills/responsive-craft/` | `4863701` | MIT (README declaration; repo has no LICENSE file — noted) | PASS — Node scripts are localhost-only preview/snapshot tools, invoked only on demand | PASS |
 | Storymap (user-story-mapping) | `INSTALLATION_APPROVED` — installed | `.claude/skills/user-story-mapping/` | `35cf8a1` | MIT | PASS — Markdown skill; optional Python exporters unavailable until Python is installed | PASS |
 
-**Not installed:**
+**Installed in the Phase 0 follow-up (2026-07-12, explicit user instruction "install remaining"):**
 
-| Skill | Status | Reason |
-| ----- | ------ | ------ |
-| BMAD Method | `PARTIALLY_COMPATIBLE` + `SETUP_REQUIRED` | MIT, very active; but installer requires Python 3.10+ and uv (both absent), writes a large agent/workflow footprint, and its PRD/architecture generation would create a parallel authority system conflicting with the 13-file documentation authority. Revisit only with explicit user approval and constrained scope. |
-| GitHub Spec Kit | `PARTIALLY_COMPATIBLE` + `SETUP_REQUIRED` | MIT, official GitHub project; requires uv (absent); `specify init` scaffolds its own constitution/spec system — parallel-authority conflict. Acceptance-criteria templates may be borrowed conceptually without installation. |
-| Interaction Design Skills | `LICENSE_REVIEW_REQUIRED` | Clean Markdown skill, but the repository contains no LICENSE file and no license statement — commercial-use rights are not granted. Do not install until the author adds a license or the user accepts the risk. |
-| UI/UX Agent Skill System | `SECURITY_REVIEW_REQUIRED` | Apache-2.0 but 4 stars, global npm CLI with `bin/`, `dist/`, adapters, and `.env.example` (potential credential surface); capability fully overlaps the installed UI/UX Pro Max. Excluded to avoid conflicting UX systems. |
-| Shadcn Admin Skill | `PARTIALLY_COMPATIBLE` | MIT but 0 stars; prompts written in Chinese; scaffolding scripts target the standalone Vite/TanStack `shadcn-admin` template, not Next.js App Router. Re-evaluate at the Admin phases; do not install now. |
+| Skill | Status | Installed location | Revision | License | Notes and constraints |
+| ----- | ------ | ------------------ | -------- | ------- | --------------------- |
+| BMAD Method | `INSTALLATION_APPROVED` — installed | `_bmad/` + 46 `bmad-*` skills in `.claude/skills/` | v6.10.0 (official `npx bmad-method install`, non-interactive, module `bmm`, tool `claude-code`) | MIT | **Authority guard:** BMAD planning/PRD/architecture workflows must not create parallel authority documents; the 13-file authority remains supreme. Some workflows use `uv run` (uv now installed). |
+| GitHub Spec Kit | `INSTALLATION_APPROVED` — installed | `.specify/` + 10 `speckit-*` skills in `.claude/skills/` | v0.12.11 (`specify-cli` via `uv tool install`; `specify init --here --integration claude`) | MIT | **Authority guard:** do not run `speckit-constitution` to generate a competing constitution without explicit user approval; generated specs defer to `docs/01`. |
+| Interaction Design Skills | `LICENSE_REVIEW_REQUIRED` — installed at user instruction | `.claude/skills/interaction-design/` | `57a3eaa` | **None** — repository has no license file or statement | Private in-project prompt use only; do not redistribute; remove or replace if the author's terms emerge. User accepted the risk by instructing installation. |
+| UI/UX Agent Skill System | `INSTALLATION_APPROVED` — curated subset installed | `.claude/skills/`: `ux-audit-skill`, `ux-journey-architect`, `webapp-ui-skill`, `admin-ui-builder`, `design-critic-skill` (Apache-2.0 LICENSE + NOTICE in each) | `ddaedd7` | Apache-2.0 | Installer inspected: benign local file-copier, no network or telemetry — prior `SECURITY_REVIEW_REQUIRED` resolved by inspection. 63 of 68 bundled skills NOT installed: off-scope (SEO, domains, server provisioning, Figma, paid traffic) or duplicate (its bundled `ui-ux-pro-max` copy would collide with the installed one). |
+| Shadcn Admin Skill | `PARTIALLY_COMPATIBLE` — installed at user instruction | `.claude/skills/shadcn-admin/` | `9cffa46` | MIT | Prompts in Chinese; scaffolding scripts target the Vite/TanStack `shadcn-admin` template. Use only its shadcn/TanStack Table reference patterns; never run `create_feature.py`/`add_sidebar_item.py` against the Next.js App Router codebase. |
+
+**Supporting tooling installed (user-local, outside the repository):** `uv 0.11.28` at `C:\Users\RAJAN\.local\bin\uv.exe` (official standalone GitHub release binary — remote install script was not executed) and `specify-cli 0.12.11` (`uv tool install`). uv-managed CPython downloads emitted a version-link warning; `specify` is functional. System-wide Python remains absent.
 
 ### Skill responsibility map (Phases 1–18)
 
-* Planning / journey phases → `user-story-mapping`
-* Design system, UI quality, and Admin UI phases → `ui-ux-pro-max` (sole UX-intelligence skill; overlapping candidates excluded to prevent conflicting systems)
-* Responsive implementation and width verification phases → `responsive-craft`
-* Motion and interaction-feedback phases → `motion-design`
-* No skill overrides the 13-file authority, roles, Direct Inquiry model, security, or RLS rules.
+* Planning / journey / slicing phases → `user-story-mapping`, `bmad-*` planning agents (constrained by authority guard), `speckit-specify`/`speckit-plan`/`speckit-tasks` for feature specs and acceptance criteria
+* Design system, UI quality phases → `ui-ux-pro-max` (primary), `design-critic-skill`, `webapp-ui-skill`
+* Interaction behavior, navigation matrices → `interaction-design`, `ux-journey-architect`
+* UX audits → `ux-audit-skill` (complete SaaS UX audit phases)
+* Responsive implementation and width verification → `responsive-craft`
+* Motion and interaction feedback → `motion-design`
+* Admin UI phases → `admin-ui-builder`, `shadcn-admin` (reference patterns only), `ui-ux-pro-max`
+* Overlap resolution: `ui-ux-pro-max` remains the primary UX-intelligence source; other UX skills advise within their niche; on conflict the 13-file authority, then `ui-ux-pro-max`, wins. No skill overrides roles, Direct Inquiry model, security, or RLS rules.
 
 ### Rollback
 
-All four skills are plain directories. Rollback: `git rm -r .claude/skills/<name>` (or `git revert` the Phase 0 commit). No global packages, registries, PATH entries, or system state were modified. Pre-install checkpoint: `fa2d7ef`.
+Repository-side installs are plain directories: `git rm -r .claude/skills/<name>`, `git rm -r _bmad .specify`, or revert the Phase 0 commits (`3a8c03d` and the follow-up commit). Outside the repository: `uv tool uninstall specify-cli`, delete `C:\Users\RAJAN\.local\bin\uv.exe` and `%APPDATA%\uv`. Pre-install checkpoints: `fa2d7ef` (first batch), `3a8c03d` (follow-up batch).
 
 ### Skill installation state values
 
@@ -1133,7 +1138,7 @@ None for generating the current 13-file documentation set.
 | Repository not audited under new authority | `PASS`           | Phase -1 audit completed and verified 2026-07-12        |
 | No application code exists                 | `NOT_STARTED`    | Greenfield build begins with the first implementation phase; if a legacy codebase exists elsewhere, the user must provide its location |
 | External skills not audited                | `DONE`           | Phase 0 completed 2026-07-12; verification pending      |
-| Python 3.10+ and uv not installed          | `SETUP_REQUIRED` | Only needed if BMAD Method or Spec Kit is later approved, or for optional storymap/ui-ux-pro-max helper scripts |
+| Python 3.10+ and uv not installed          | `DONE`           | uv 0.11.28 installed user-locally 2026-07-12; specify-cli functional; system Python still absent (uv-managed CPython link warning noted) |
 | Final provider credentials unavailable     | `SETUP_REQUIRED` | User will provide during provider and production phases |
 | Hosting access unavailable                 | `SETUP_REQUIRED` | User will provide                                       |
 | Domain and DNS access unavailable          | `SETUP_REQUIRED` | User will provide                                       |
@@ -1225,6 +1230,32 @@ Before every high-risk phase:
 ---
 
 ## 32. Recent State Changes
+
+### 2026-07-12 — Phase 0 follow-up: remaining five skills installed at user instruction
+
+```text
+Date: 2026-07-12
+Phase: Phase 0 follow-up (user instruction: "install remaining")
+Status: DONE; Phase 0 verification NOT_STARTED
+Summary: BMAD Method v6.10.0 installed via official npx installer
+(_bmad/ + 46 bmad-* skills); Spec Kit v0.12.11 installed via uv-based
+specify-cli (.specify/ + 10 speckit-* skills, Claude integration);
+interaction-design @57a3eaa installed with LICENSE_REVIEW_REQUIRED risk
+accepted by user; curated 5-skill subset of ui-ux-agent-skill-system
+@ddaedd7 installed (installer inspected: benign local copier — security
+concern resolved; 63 off-scope/duplicate skills excluded); shadcn-admin
+@9cffa46 installed with compatibility constraints. Supporting tooling:
+uv 0.11.28 (official release binary) and specify-cli, user-local.
+Authority guards recorded: BMAD and speckit must not generate parallel
+authority documents. .claude/skills now holds 67 skills.
+Checks run: SKILL.md frontmatter validated; secret scan of _bmad config
+and .specify memory clean; lint/typecheck/tests/build still not
+applicable (no app toolchain)
+Blockers: legacy-codebase question still open
+Rollback checkpoint: 3a8c03d (pre-follow-up); see Section 13 rollback
+Server status: Not running — no application exists
+Next prompt: Phase 0 Manual Verification Prompt
+```
 
 ### 2026-07-12 — Phase 0 GitHub Skills Inspection and Installation DONE
 
